@@ -18,6 +18,10 @@ func GetPort() string {
 	return os.Getenv("PORT")
 }
 
+func GetJwtSecret() string {
+	return os.Getenv("JWT_SECRET")
+}
+
 func GetDbConnectionString() string {
 	var (
 		DatabaseUser     = os.Getenv("DB_USER")

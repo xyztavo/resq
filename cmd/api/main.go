@@ -10,11 +10,12 @@ import (
 )
 
 func main() {
-	// Check if errors occurs while migrating database
+	// Migrates and instanciate a db connection
 	if err := database.Migrate(); err != nil {
 		log.Fatal(err)
 	}
 	e := echo.New()
+	// Setups the routes
 	routes.SetupRoutes(e)
 	e.Logger.Fatal(e.Start(configs.GetPort()))
 }

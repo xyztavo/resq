@@ -10,21 +10,30 @@ import (
 
 var db *sql.DB
 
+// starts once the package loads
 func init() {
 	var err error
+	// creates a db connection
 	db, err = sql.Open("postgres", configs.GetDbConnectionString())
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
+// reuses that db connection
+func GetDb() *sql.DB {
+	return db
+}
+
+// migrate db using the initalized db connection
 func Migrate() error {
 	_, err := db.Exec(`
-	CREATE TABLE IF NOT EXISTS company_admin (
-	id UUID PRIMARY KEY,
-	name VARCHAR(40),
+	CREATE TABLE IF NOT EXISTS users (
+	id VARCHAR(40) PRIMARY KEY,
+	name VARCHAR(40) NOT NULL,
+	role VARCHAR(40),
 	email VARCHAR(40) UNIQUE, 
-	password VARCHAR(200)
+	password VARCHAR(200) NOT NULL
 	);`)
 	if err != nil {
 		return err
