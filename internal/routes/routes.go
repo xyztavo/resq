@@ -18,6 +18,8 @@ func SetupRoutes(e *echo.Echo) {
 func AuthRequiredRoutes(e *echo.Echo) {
 	// Auth Required Routes
 	e.GET("/user", handlers.GetUser, middlewares.Auth)
+	e.PATCH("/user/ngo/admin", handlers.UpdateUserNGOAdmin)
+	e.PATCH("/user/company/admin", handlers.UpdateUserCompanyAdmin)
 }
 
 func AdminRoutes(e *echo.Echo) {

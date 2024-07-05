@@ -54,3 +54,19 @@ func GetUserByEmail(email string) (user models.User, err error) {
 	}
 	return user, nil
 }
+
+func UpdateNGOUserRole(userId string) error {
+	_, err := db.Exec("UPDATE users SET role = 'ngo_admin' WHERE id = $1", userId)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func UpdateCompanyUserRole(userId string) error {
+	_, err := db.Exec("UPDATE users SET role = 'company_admin' WHERE id = $1", userId)
+	if err != nil {
+		return err
+	}
+	return nil
+}

@@ -5,7 +5,7 @@ This project will have a frontend. beta stage for now.
 # KNOWN BUGS:
 - [ ] ...
 # TODO: 
-- [ ] Route for users choose if they are in a NGO / COMPANY 
+- [x] Route for users choose if they are in a NGO / COMPANY 
 - [ ] Create NGO/ COMPANY tables and CRUD routes for them 
 - [ ] Create Requests/Materials tables and CRUD routes for them
 - [ ] Add search filters for Materials
