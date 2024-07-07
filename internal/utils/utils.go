@@ -1,9 +1,11 @@
 package utils
 
 import (
+	"encoding/json"
 	"errors"
 	"strings"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 	"github.com/xyztavo/resq/configs"
@@ -43,4 +45,15 @@ func GetClaimsFromToken(c echo.Context) (claims models.UserClaimsJwt, err error)
 	}
 
 	return claims, nil
+}
+
+func BindAndValidate(c echo.Context, structs any) error {
+	if err := json.NewDecoder(c.Request().Body).Decode(&structs); err != nil {
+		return err
+	}
+	validate := validator.New()
+	if err := validate.Struct(structs); err != nil {
+		return err
+	}
+	return nil
 }

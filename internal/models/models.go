@@ -10,6 +10,19 @@ type User struct {
 	Password string `json:"password"`
 }
 
+type Company struct {
+	Id          string  `json:"id"`
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Rating      float32 `json:"rating"`
+	CreatorId   string  `json:"creatorId"`
+}
+
+type CreateCompanyBody struct {
+	Name        string `json:"name" validate:"required"`
+	Description string `json:"description" validate:"required"`
+}
+
 type UserClaimsJwt struct {
 	Id   string `json:"id"`
 	Role string `json:"role"`

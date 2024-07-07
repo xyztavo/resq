@@ -34,7 +34,22 @@ func Migrate() error {
 	role VARCHAR(40),
 	email VARCHAR(40) UNIQUE, 
 	password VARCHAR(200) NOT NULL
-	);`)
+	);
+	CREATE TABLE IF NOT EXISTS companies (
+	id VARCHAR(40) PRIMARY KEY,
+	name VARCHAR(40) NOT NULL,
+	description VARCHAR(40) NOT NULL, 
+	rating DOUBLE PRECISION,
+	creator_id VARCHAR(40) NOT NULL
+	);
+	CREATE TABLE IF NOT EXISTS ngos (
+	id VARCHAR(40) PRIMARY KEY,
+	name VARCHAR(40) NOT NULL,
+	description VARCHAR(40) NOT NULL, 
+	rating DOUBLE PRECISION,
+	creator_id VARCHAR(40) NOT NULL
+	);
+	`)
 	if err != nil {
 		return err
 	}
