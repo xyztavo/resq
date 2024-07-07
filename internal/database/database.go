@@ -31,8 +31,10 @@ func Migrate() error {
 	CREATE TABLE IF NOT EXISTS users (
 	id VARCHAR(40) PRIMARY KEY,
 	name VARCHAR(40) NOT NULL,
-	role VARCHAR(40),
-	email VARCHAR(40) UNIQUE, 
+	role VARCHAR(40) NOT NULL,
+	org_type VARCHAR(40),
+	org_id VARCHAR(40),
+	email VARCHAR(40) UNIQUE NOT NULL, 
 	password VARCHAR(200) NOT NULL
 	);
 	CREATE TABLE IF NOT EXISTS companies (

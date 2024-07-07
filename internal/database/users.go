@@ -30,7 +30,7 @@ func GetUsers() (users []models.User, err error) {
 	}
 	for rows.Next() {
 		var user models.User
-		if err := rows.Scan(&user.Id, &user.Name, &user.Role, &user.Email, &user.Password); err != nil {
+		if err := rows.Scan(&user.Id, &user.Name, &user.Role, &user.OrgType, &user.OrgId, &user.Email, &user.Password); err != nil {
 			return nil, err
 		}
 		users = append(users, user)
@@ -41,7 +41,7 @@ func GetUsers() (users []models.User, err error) {
 
 func GetUserById(userId string) (user models.User, err error) {
 	if err := db.QueryRow("SELECT * FROM users WHERE id = $1", userId).
-		Scan(&user.Id, &user.Name, &user.Role, &user.Email, &user.Password); err != nil {
+		Scan(&user.Id, &user.Name, &user.Role, &user.OrgType, &user.OrgId, &user.Email, &user.Password); err != nil {
 		return user, err
 	}
 	return user, nil
@@ -49,7 +49,7 @@ func GetUserById(userId string) (user models.User, err error) {
 
 func GetUserByEmail(email string) (user models.User, err error) {
 	if err := db.QueryRow("SELECT * FROM users WHERE email = $1", email).
-		Scan(&user.Id, &user.Name, &user.Role, &user.Email, &user.Password); err != nil {
+		Scan(&user.Id, &user.Name, &user.Role, &user.OrgType, &user.OrgId, &user.Email, &user.Password); err != nil {
 		return user, err
 	}
 	return user, nil

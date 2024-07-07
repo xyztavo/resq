@@ -10,7 +10,12 @@ func CreateCompany(userId string, company *models.CreateCompanyBody) (createdCom
 	if err != nil {
 		return "", err
 	}
-	err = db.QueryRow("INSERT INTO companies (id, name, description, creator_id) VALUES ($1, $2, $3, $4) RETURNING id", nanoid, company.Name, company.Description, userId).Scan(&createdCompanyId)
+	err = db.QueryRow("INSERT INTO companies (id, name, description, creator_id) VALUES ($1, $2, $3, $4) RETURNING id", nanoid, company.Name, company.Description, userId).
+		Scan(&createdCompanyId)
+	if err != nil {
+		return "", err
+	}
+	_, err = db.Exec("UPDATE users SET org_type = $1, org_id = $2 WHERE id = $3", "company", createdCompanyId, userId)
 	if err != nil {
 		return "", err
 	}
@@ -24,12 +29,28 @@ func GetCompanies() (companies []models.Company, err error) {
 	}
 	for rows.Next() {
 		var company models.Company
-		rows.Scan(&company.Id, &company.Name, &company.Description, &company.Rating, &company.CreatorId)
+		if err := rows.Scan(&company.Id, &company.Name, &company.Description, &company.Rating, &company.CreatorId); err != nil {
+			return nil, err
+		}
 		companies = append(companies, company)
 	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
+
 	rows.Close()
 	return companies, nil
+}
+
+func GetUserAdminCompany(userId string) (company models.Company, err error) {
+	if err := db.QueryRow("SELECT * FROM companies WHERE creator_id = $1", userId).
+		Scan(&company.Id, &company.Name, &company.Description, &company.Rating, &company.CreatorId); err != nil {
+		return company, err
+	}
+	return company, nil
+}
+
+func GetUserCompany(companyId *string) (company models.Company, err error) {
+	if err := db.QueryRow("SELECT * FROM companies WHERE id = $1", companyId).
+		Scan(&company.Id, &company.Name, &company.Description, &company.Rating, &company.CreatorId); err != nil {
+		return company, err
+	}
+	return company, err
 }

@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -20,7 +19,7 @@ func GetUsers(c echo.Context) error {
 
 func CreateUser(c echo.Context) error {
 	userBody := new(models.CreateUserBody)
-	if err := json.NewDecoder(c.Request().Body).Decode(&userBody); err != nil {
+	if err := utils.BindAndValidate(c, userBody); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	createdUserId, err := database.CreateUser(userBody)

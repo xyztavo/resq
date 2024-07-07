@@ -3,19 +3,21 @@ package models
 import "github.com/golang-jwt/jwt/v5"
 
 type User struct {
-	Id       string `json:"id"`
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	Role     string `json:"role"`
-	Password string `json:"password"`
+	Id       string  `json:"id"`
+	Name     string  `json:"name"`
+	Email    string  `json:"email"`
+	Role     string  `json:"role"`
+	OrgType  *string `json:"orgType"`
+	OrgId    *string `json:"orgId"`
+	Password string  `json:"password"`
 }
 
 type Company struct {
-	Id          string  `json:"id"`
-	Name        string  `json:"name"`
-	Description string  `json:"description"`
-	Rating      float32 `json:"rating"`
-	CreatorId   string  `json:"creatorId"`
+	Id          string   `json:"id"`
+	Name        string   `json:"name"`
+	Description string   `json:"description"`
+	Rating      *float32 `json:"rating"`
+	CreatorId   string   `json:"creatorId"`
 }
 
 type CreateCompanyBody struct {
@@ -24,15 +26,16 @@ type CreateCompanyBody struct {
 }
 
 type UserClaimsJwt struct {
-	Id   string `json:"id"`
-	Role string `json:"role"`
+	Id      string  `json:"id"`
+	Role    string  `json:"role"`
+	OrgType *string `json:"orgType"`
+	OrgId   *string `json:"orgId"`
 	jwt.RegisteredClaims
 }
 
 type CreateUserBody struct {
 	Name     string `json:"name" validate:"required"`
 	Email    string `json:"email" validate:"required"`
-	Role     string `json:"role" validate:"required"`
 	Password string `json:"password" validate:"required"`
 }
 
