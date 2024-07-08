@@ -7,6 +7,7 @@ This project will have a frontend. beta stage for now.
 # TODO: 
 - [x] Route for users choose if they are in a NGO / COMPANY 
 - [x] created Company table and CREATE/ GET ALL routes.
+- [x] route to get companies admins
 - [ ] Create NGO/ COMPANY tables and CRUD routes for them 
 - [ ] Create Requests/Materials tables and CRUD routes for them
 - [ ] Add search filters for Materials

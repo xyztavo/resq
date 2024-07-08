@@ -19,7 +19,25 @@ func CreateCompany(userId string, company *models.CreateCompanyBody) (createdCom
 	if err != nil {
 		return "", err
 	}
+	_, err = db.Exec("INSERT INTO companies_admins (user_id, company_id) VALUES ($1, $2)", userId, createdCompanyId)
+	if err != nil {
+		return "", err
+	}
 	return createdCompanyId, nil
+}
+func GetCompaniesAdmins() (companiesAdmins []models.CompanyAdmin, err error) {
+	rows, err := db.Query("SELECT * FROM companies_admins")
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		var companyAdmin models.CompanyAdmin
+		if err := rows.Scan(&companyAdmin.UserId, &companyAdmin.CompanyId); err != nil {
+			return nil, err
+		}
+		companiesAdmins = append(companiesAdmins, companyAdmin)
+	}
+	return companiesAdmins, nil
 }
 
 func GetCompanies() (companies []models.Company, err error) {
@@ -39,7 +57,7 @@ func GetCompanies() (companies []models.Company, err error) {
 	return companies, nil
 }
 
-func GetUserAdminCompany(userId string) (company models.Company, err error) {
+func GetAdminCompany(userId string) (company models.Company, err error) {
 	if err := db.QueryRow("SELECT * FROM companies WHERE creator_id = $1", userId).
 		Scan(&company.Id, &company.Name, &company.Description, &company.Rating, &company.CreatorId); err != nil {
 		return company, err

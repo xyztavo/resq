@@ -20,6 +20,11 @@ type Company struct {
 	CreatorId   string   `json:"creatorId"`
 }
 
+type CompanyAdmin struct {
+	UserId    string `json:"userId"`
+	CompanyId string `json:"companyId"`
+}
+
 type CreateCompanyBody struct {
 	Name        string `json:"name" validate:"required"`
 	Description string `json:"description" validate:"required"`

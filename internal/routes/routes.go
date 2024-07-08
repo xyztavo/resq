@@ -31,4 +31,5 @@ func AdminRoutes(e *echo.Echo) {
 	// In production all of those routes should apply the middleware adminAuth
 	e.GET("/companies", handlers.GetCompanies)
 	e.GET("/users", handlers.GetUsers)
+	e.GET("/companies/admins", handlers.GetCompaniesAdmins)
 }

@@ -51,6 +51,14 @@ func Migrate() error {
 	rating DOUBLE PRECISION,
 	creator_id VARCHAR(40) NOT NULL
 	);
+	CREATE TABLE IF NOT EXISTS companies_admins (
+	user_id VARCHAR(40) REFERENCES users(id),
+	company_id VARCHAR(40) REFERENCES companies(id)
+	);
+	CREATE TABLE IF NOT EXISTS ngos_admins (
+	user_id VARCHAR(40) REFERENCES users(id),
+	ngo_id VARCHAR(40) REFERENCES ngos(id)
+	);
 	`)
 	if err != nil {
 		return err

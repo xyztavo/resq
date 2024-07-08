@@ -49,12 +49,20 @@ func GetUserCompany(c echo.Context) error {
 	return c.JSON(http.StatusOK, company)
 }
 
+func GetCompaniesAdmins(c echo.Context) error {
+	companies, err := database.GetCompaniesAdmins()
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+	return c.JSON(http.StatusOK, companies)
+}
+
 func GetUserCompanyAdmin(c echo.Context) error {
 	userId, err := utils.GetIdFromToken(c)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusUnauthorized, err.Error())
 	}
-	company, err := database.GetUserAdminCompany(userId)
+	company, err := database.GetAdminCompany(userId)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
