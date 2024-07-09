@@ -7,7 +7,7 @@ import (
 	"github.com/xyztavo/resq/internal/models"
 )
 
-func CreateCompany(userId string, company *models.CreateCompanyBody) (createdNGOId string, err error) {
+func CreateNGO(userId string, company *models.CreateNGOBody) (createdNGOId string, err error) {
 	nanoid, err := gonanoid.New()
 	if err != nil {
 		return "", err
@@ -34,42 +34,43 @@ func CreateCompany(userId string, company *models.CreateCompanyBody) (createdNGO
 	}
 	return createdNGOId, nil
 }
-func GetCompaniesAdmins() (companiesAdmins []models.CompanyAdmin, err error) {
-	rows, err := db.Query("SELECT * FROM companies_admins")
+
+func GetNGOsAdmins() (NGOsAdmins []models.NGOAdmin, err error) {
+	rows, err := db.Query("SELECT * FROM ngos_admins")
 	if err != nil {
 		return nil, err
 	}
 	for rows.Next() {
-		var companyAdmin models.CompanyAdmin
-		if err := rows.Scan(&companyAdmin.UserId, &companyAdmin.CompanyId); err != nil {
+		var ngoAdmin models.NGOAdmin
+		if err := rows.Scan(&ngoAdmin.UserId, &ngoAdmin.NGOId); err != nil {
 			return nil, err
 		}
-		companiesAdmins = append(companiesAdmins, companyAdmin)
+		NGOsAdmins = append(NGOsAdmins, ngoAdmin)
 	}
-	return companiesAdmins, nil
+	return NGOsAdmins, nil
 }
 
-func GetCompanies() (companies []models.Company, err error) {
-	rows, err := db.Query("SELECT * FROM companies")
+func GetNGOs() (NGOs []models.NGO, err error) {
+	rows, err := db.Query("SELECT * FROM ngos")
 	if err != nil {
 		return nil, err
 	}
 	for rows.Next() {
-		var company models.Company
-		if err := rows.Scan(&company.Id, &company.Name, &company.Description, &company.Rating, &company.CreatorId); err != nil {
+		var NGO models.NGO
+		if err := rows.Scan(&NGO.Id, &NGO.Name, &NGO.Description, &NGO.Rating, &NGO.CreatorId); err != nil {
 			return nil, err
 		}
-		companies = append(companies, company)
+		NGOs = append(NGOs, NGO)
 	}
 
 	rows.Close()
-	return companies, nil
+	return NGOs, nil
 }
 
-func GetUserCompany(companyId *string) (company models.Company, err error) {
-	if err := db.QueryRow("SELECT * FROM companies WHERE id = $1", companyId).
-		Scan(&company.Id, &company.Name, &company.Description, &company.Rating, &company.CreatorId); err != nil {
-		return company, err
+func GetUserNGO(companyId *string) (ngo models.NGO, err error) {
+	if err := db.QueryRow("SELECT * FROM ngos WHERE id = $1", companyId).
+		Scan(&ngo.Id, &ngo.Name, &ngo.Description, &ngo.Rating, &ngo.CreatorId); err != nil {
+		return ngo, err
 	}
-	return company, err
+	return ngo, err
 }

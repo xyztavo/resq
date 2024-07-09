@@ -18,18 +18,21 @@ func SetupRoutes(e *echo.Echo) {
 func AuthRequiredRoutes(e *echo.Echo) {
 	// Auth Required Routes
 	e.GET("/user", handlers.GetUser, middlewares.Auth)
-	e.PATCH("/user/ngo/admin", handlers.UpdateUserNGOAdmin)
-	e.PATCH("/user/company/admin", handlers.UpdateUserCompanyAdmin)
 	// Company Related Routes:
-	e.POST("/company", handlers.CreateCompany)
-	e.GET("/user/company", handlers.GetUserCompany)
-	// Company admin routes
-	e.GET("/user/company/admin", handlers.GetUserCompanyAdmin)
+	e.POST("/company", handlers.CreateCompany, middlewares.Auth)
+	e.GET("/user/company", handlers.GetUserCompany, middlewares.Auth)
+	// NGO Related Routes:
+	e.POST("/ngo", handlers.CreateNGO, middlewares.Auth)
+	e.GET("/user/ngo", handlers.GetUserNGO, middlewares.Auth)
 }
 
 func AdminRoutes(e *echo.Echo) {
 	// In production all of those routes should apply the middleware adminAuth
-	e.GET("/companies", handlers.GetCompanies)
 	e.GET("/users", handlers.GetUsers)
+	// Companies related routes:
+	e.GET("/companies", handlers.GetCompanies)
 	e.GET("/companies/admins", handlers.GetCompaniesAdmins)
+	// NGO Related Routes:
+	e.GET("/ngos", handlers.GetNGOs)
+	e.GET("/ngos/admins", handlers.GetNGOsAdmins)
 }

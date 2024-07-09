@@ -44,39 +44,3 @@ func GetUser(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, user)
 }
-
-func UpdateUserCompanyAdmin(c echo.Context) error {
-	id, err := utils.GetIdFromToken(c)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusUnauthorized, err.Error())
-	}
-	user, err := database.GetUserById(id)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-	}
-	if user.Role == "ngo_admin" {
-		return echo.NewHTTPError(http.StatusBadRequest, "user already is a ngo admin. mind creating a new account for each purpose.")
-	}
-	if err := database.UpdateCompanyUserRole(id); err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-	}
-	return c.JSON(http.StatusOK, map[string]string{"message": "user is now a company admin"})
-}
-
-func UpdateUserNGOAdmin(c echo.Context) error {
-	id, err := utils.GetIdFromToken(c)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusUnauthorized, err.Error())
-	}
-	user, err := database.GetUserById(id)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-	}
-	if user.Role == "company_admin" {
-		return echo.NewHTTPError(http.StatusBadRequest, "user already is a company admin. mind creating a new account for each purpose.")
-	}
-	if err := database.UpdateNGOUserRole(id); err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-	}
-	return c.JSON(http.StatusOK, map[string]string{"message": "user is now a NGO admin"})
-}

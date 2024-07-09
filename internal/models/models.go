@@ -20,12 +20,30 @@ type Company struct {
 	CreatorId   string   `json:"creatorId"`
 }
 
+type NGO struct {
+	Id          string   `json:"id"`
+	Name        string   `json:"name"`
+	Description string   `json:"description"`
+	Rating      *float32 `json:"rating"`
+	CreatorId   string   `json:"creatorId"`
+}
+
 type CompanyAdmin struct {
 	UserId    string `json:"userId"`
 	CompanyId string `json:"companyId"`
 }
 
+type NGOAdmin struct {
+	UserId string `json:"userId"`
+	NGOId  string `json:"NGOId"`
+}
+
 type CreateCompanyBody struct {
+	Name        string `json:"name" validate:"required"`
+	Description string `json:"description" validate:"required"`
+}
+
+type CreateNGOBody struct {
 	Name        string `json:"name" validate:"required"`
 	Description string `json:"description" validate:"required"`
 }
