@@ -4,7 +4,7 @@ This project will have a frontend. beta stage for now.
 
 # KNOWN BUGS:
 - [x] /companies not returning creatorId
-- [ ] user can create multiple companies
+- [x] user can create multiple companies
 # TODO: 
 - [x] Route for users choose if they are in a NGO / COMPANY 
 - [x] created Company table and CREATE/ GET ALL routes.
