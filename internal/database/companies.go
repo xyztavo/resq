@@ -1,6 +1,8 @@
 package database
 
 import (
+	"errors"
+
 	gonanoid "github.com/matoous/go-nanoid/v2"
 	"github.com/xyztavo/resq/internal/models"
 )
@@ -10,12 +12,19 @@ func CreateCompany(userId string, company *models.CreateCompanyBody) (createdCom
 	if err != nil {
 		return "", err
 	}
+	userFromDb, err := GetUserById(userId)
+	if err != nil {
+		return "", err
+	}
+	if userFromDb.Role == "company_admin" {
+		return "", errors.New("user already has a company")
+	}
 	err = db.QueryRow("INSERT INTO companies (id, name, description, creator_id) VALUES ($1, $2, $3, $4) RETURNING id", nanoid, company.Name, company.Description, userId).
 		Scan(&createdCompanyId)
 	if err != nil {
 		return "", err
 	}
-	_, err = db.Exec("UPDATE users SET org_type = $1, org_id = $2 WHERE id = $3", "company", createdCompanyId, userId)
+	_, err = db.Exec("UPDATE users SET org_type = 'company', org_id = $1, role = 'company_admin' WHERE id = $2", createdCompanyId, userId)
 	if err != nil {
 		return "", err
 	}

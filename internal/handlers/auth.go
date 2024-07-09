@@ -27,10 +27,8 @@ func Auth(c echo.Context) error {
 	}
 	// create a JWT with user id, role and return it
 	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, models.UserClaimsJwt{
-		Id:      userFromDatabase.Id,
-		Role:    userFromDatabase.Role,
-		OrgType: userFromDatabase.OrgType,
-		OrgId:   userFromDatabase.OrgId,
+		Id:   userFromDatabase.Id,
+		Role: userFromDatabase.Role,
 	})
 	signedToken, err := accessToken.SignedString([]byte(configs.GetJwtSecret()))
 	if err != nil {

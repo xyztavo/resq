@@ -38,11 +38,18 @@ func GetCompanies(c echo.Context) error {
 }
 
 func GetUserCompany(c echo.Context) error {
-	claims, err := utils.GetClaimsFromToken(c)
+	id, err := utils.GetIdFromToken(c)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
-	company, err := database.GetUserCompany(claims.OrgId)
+	userFromDb, err := database.GetUserById(id)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+	if userFromDb.Role != "company_admin" {
+		return echo.NewHTTPError(http.StatusUnauthorized, "user must be company admin")
+	}
+	company, err := database.GetUserCompany(userFromDb.OrgId)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}

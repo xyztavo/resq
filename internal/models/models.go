@@ -31,10 +31,8 @@ type CreateCompanyBody struct {
 }
 
 type UserClaimsJwt struct {
-	Id      string  `json:"id"`
-	Role    string  `json:"role"`
-	OrgType *string `json:"orgType"`
-	OrgId   *string `json:"orgId"`
+	Id   string `json:"id"`
+	Role string `json:"role"`
 	jwt.RegisteredClaims
 }
 
