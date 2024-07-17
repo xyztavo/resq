@@ -22,7 +22,6 @@ func CreateCompany(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
-
 	return c.JSON(http.StatusCreated, map[string]string{
 		"message":          "company created with ease!",
 		"createdCompanyId": createdCompanyId,
@@ -42,14 +41,7 @@ func GetUserCompany(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
-	userFromDb, err := database.GetUserById(id)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-	}
-	if userFromDb.Role != "company_admin" {
-		return echo.NewHTTPError(http.StatusUnauthorized, "user must be company admin")
-	}
-	company, err := database.GetUserCompany(userFromDb.OrgId)
+	company, err := database.GetUserCompany(id)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}

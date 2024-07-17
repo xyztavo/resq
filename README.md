@@ -11,6 +11,11 @@ This project will have a frontend. beta stage for now.
 - [x] route to get companies admins
 - [x] Create NGO/ COMPANY tables and Create/Read routes for them
 - [ ] add NGO/ COMPANY Update/Delete routes 
-- [ ] Create Requests/Materials/RequestsHistory tables and CRUD routes for them
+
+- [x] Create Materials tables and Create/Read
+- [ ] Create Materials Update/Delete routes
 - [ ] Add search filters for Materials
+
+- [ ] Create Requests tables and CRUD routes for them
 - [ ] If company accepts NGO requests, save it a in Requests History table 
+- [ ] use more joins to prevent making redundant db calls

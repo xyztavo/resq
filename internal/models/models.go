@@ -1,13 +1,16 @@
 package models
 
-import "github.com/golang-jwt/jwt/v5"
+import (
+	"time"
+
+	"github.com/golang-jwt/jwt/v5"
+)
 
 type User struct {
 	Id       string  `json:"id"`
 	Name     string  `json:"name"`
 	Email    string  `json:"email"`
 	Role     string  `json:"role"`
-	OrgType  *string `json:"orgType"`
 	OrgId    *string `json:"orgId"`
 	Password string  `json:"password"`
 }
@@ -26,6 +29,20 @@ type NGO struct {
 	Description string   `json:"description"`
 	Rating      *float32 `json:"rating"`
 	CreatorId   string   `json:"creatorId"`
+}
+
+type Material struct {
+	Id          string    `json:"id"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	CreatedAt   time.Time `json:"createdAt"`
+	IsActive    bool      `json:"isActive"`
+	CompanyId   string    `json:"companyId"`
+}
+
+type CreateMaterial struct {
+	Title       string `json:"title" validate:"required"`
+	Description string `json:"description" validate:"required"`
 }
 
 type CompanyAdmin struct {

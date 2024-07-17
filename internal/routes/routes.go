@@ -13,17 +13,23 @@ func SetupRoutes(e *echo.Echo) {
 
 	AdminRoutes(e)
 	AuthRequiredRoutes(e)
+	CompanyAdminRoutes(e)
 }
 
 func AuthRequiredRoutes(e *echo.Echo) {
-	// Auth Required Routes
+	// Auth Required Routes:
 	e.GET("/user", handlers.GetUser, middlewares.Auth)
 	// Company Related Routes:
 	e.POST("/company", handlers.CreateCompany, middlewares.Auth)
-	e.GET("/user/company", handlers.GetUserCompany, middlewares.Auth)
 	// NGO Related Routes:
 	e.POST("/ngo", handlers.CreateNGO, middlewares.Auth)
 	e.GET("/user/ngo", handlers.GetUserNGO, middlewares.Auth)
+}
+
+func CompanyAdminRoutes(e *echo.Echo) {
+	e.POST("/company/material", handlers.CreateMaterial, middlewares.CompanyAdminAuth)
+	e.GET("/company/material", handlers.GetCompanyMaterial)
+	e.GET("/user/company", handlers.GetUserCompany, middlewares.Auth)
 }
 
 func AdminRoutes(e *echo.Echo) {

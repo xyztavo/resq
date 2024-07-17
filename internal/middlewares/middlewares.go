@@ -7,6 +7,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 	"github.com/xyztavo/resq/configs"
+	"github.com/xyztavo/resq/internal/database"
 	"github.com/xyztavo/resq/internal/models"
 	"github.com/xyztavo/resq/internal/utils"
 )
@@ -50,6 +51,23 @@ func AdminAuth(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 		if claims.Role != "admin" {
 			return echo.NewHTTPError(http.StatusUnauthorized, "must be admin to use the current route")
+		}
+		return next(c)
+	}
+}
+
+func CompanyAdminAuth(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		userId, err := utils.GetIdFromToken(c)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusUnauthorized, err.Error())
+		}
+		userFromDb, err := database.GetUserById(userId)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		}
+		if userFromDb.Role != "company_admin" {
+			return echo.NewHTTPError(http.StatusUnauthorized, "must be company admin to use the current route")
 		}
 		return next(c)
 	}

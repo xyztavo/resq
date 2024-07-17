@@ -7,7 +7,7 @@ import (
 	"github.com/xyztavo/resq/internal/models"
 )
 
-func CreateCompany(userId string, company *models.CreateCompanyBody) (createdNGOId string, err error) {
+func CreateCompany(userId string, company *models.CreateCompanyBody) (createdCompanyId string, err error) {
 	nanoid, err := gonanoid.New()
 	if err != nil {
 		return "", err
@@ -19,21 +19,22 @@ func CreateCompany(userId string, company *models.CreateCompanyBody) (createdNGO
 	if userFromDb.Role == "ngo_admin" || userFromDb.Role == "company_admin" {
 		return "", errors.New("user already has a ngo / company")
 	}
-	err = db.QueryRow("INSERT INTO ngos (id, name, description, creator_id) VALUES ($1, $2, $3, $4) RETURNING id", nanoid, company.Name, company.Description, userId).
-		Scan(&createdNGOId)
+	err = db.QueryRow("INSERT INTO companies (id, name, description, creator_id) VALUES ($1, $2, $3, $4) RETURNING id", nanoid, company.Name, company.Description, userId).
+		Scan(&createdCompanyId)
 	if err != nil {
 		return "", err
 	}
-	_, err = db.Exec("UPDATE users SET org_type = 'ngo', org_id = $1, role = 'ngo_admin' WHERE id = $2", createdNGOId, userId)
+	_, err = db.Exec("UPDATE users SET org_id = $1, role = 'company_admin' WHERE id = $2", createdCompanyId, userId)
 	if err != nil {
 		return "", err
 	}
-	_, err = db.Exec("INSERT INTO ngos_admins (user_id, ngo_id) VALUES ($1, $2)", userId, createdNGOId)
+	_, err = db.Exec("INSERT INTO companies_admins (user_id, company_id) VALUES ($1, $2)", userId, createdCompanyId)
 	if err != nil {
 		return "", err
 	}
-	return createdNGOId, nil
+	return createdCompanyId, nil
 }
+
 func GetCompaniesAdmins() (companiesAdmins []models.CompanyAdmin, err error) {
 	rows, err := db.Query("SELECT * FROM companies_admins")
 	if err != nil {
@@ -66,9 +67,12 @@ func GetCompanies() (companies []models.Company, err error) {
 	return companies, nil
 }
 
-func GetUserCompany(companyId *string) (company models.Company, err error) {
-	if err := db.QueryRow("SELECT * FROM companies WHERE id = $1", companyId).
-		Scan(&company.Id, &company.Name, &company.Description, &company.Rating, &company.CreatorId); err != nil {
+func GetUserCompany(userId string) (company models.Company, err error) {
+	if err := db.QueryRow(`
+	SELECT c.id AS company_id, c.name AS company_name, c.description AS company_description, c.rating AS company_rating
+	FROM companies c
+	WHERE c.creator_id = $1`, userId).
+		Scan(&company.Id, &company.Name, &company.Description, &company.Rating); err != nil {
 		return company, err
 	}
 	return company, err

@@ -24,7 +24,7 @@ func CreateNGO(userId string, company *models.CreateNGOBody) (createdNGOId strin
 	if err != nil {
 		return "", err
 	}
-	_, err = db.Exec("UPDATE users SET org_type = 'ngo', org_id = $1, role = 'ngo_admin' WHERE id = $2", createdNGOId, userId)
+	_, err = db.Exec("UPDATE users SET org_id = $1, role = 'ngo_admin' WHERE id = $2", createdNGOId, userId)
 	if err != nil {
 		return "", err
 	}

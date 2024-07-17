@@ -32,7 +32,6 @@ func Migrate() error {
 	id VARCHAR(40) PRIMARY KEY,
 	name VARCHAR(40) NOT NULL,
 	role VARCHAR(40) NOT NULL,
-	org_type VARCHAR(40),
 	org_id VARCHAR(40),
 	email VARCHAR(40) UNIQUE NOT NULL, 
 	password VARCHAR(200) NOT NULL
@@ -42,22 +41,30 @@ func Migrate() error {
 	name VARCHAR(40) NOT NULL,
 	description VARCHAR(40) NOT NULL, 
 	rating DOUBLE PRECISION,
-	creator_id VARCHAR(40) NOT NULL
+	creator_id VARCHAR(40) REFERENCES users(id)
 	);
 	CREATE TABLE IF NOT EXISTS ngos (
 	id VARCHAR(40) PRIMARY KEY,
 	name VARCHAR(40) NOT NULL,
 	description VARCHAR(40) NOT NULL, 
 	rating DOUBLE PRECISION,
-	creator_id VARCHAR(40) NOT NULL
+	creator_id VARCHAR(40) REFERENCES users(id)
 	);
 	CREATE TABLE IF NOT EXISTS companies_admins (
-	user_id VARCHAR(40) REFERENCES users(id),
+	user_id VARCHAR(40) UNIQUE REFERENCES users(id),
 	company_id VARCHAR(40) REFERENCES companies(id)
 	);
 	CREATE TABLE IF NOT EXISTS ngos_admins (
 	user_id VARCHAR(40) REFERENCES users(id),
 	ngo_id VARCHAR(40) REFERENCES ngos(id)
+	);
+	CREATE TABLE IF NOT EXISTS materials (
+	id VARCHAR(40) PRIMARY KEY, 
+	title VARCHAR(40) NOT NULL, 
+	description VARCHAR(200) NOT NULL, 
+	created_at TIMESTAMP DEFAULT NOW(),
+	is_active BOOLEAN DEFAULT TRUE,
+	company_id VARCHAR(40) REFERENCES companies(id)
 	);
 	`)
 	if err != nil {
