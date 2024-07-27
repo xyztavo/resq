@@ -40,6 +40,25 @@ type Material struct {
 	CompanyId   string    `json:"companyId"`
 }
 
+type Request struct {
+	Id         string    `json:"id"`
+	NGOId      string    `json:"ngoId"`
+	MaterialId string    `json:"materialId"`
+	CreatedAt  time.Time `json:"createdAt"`
+	Status     string    `json:"status"`
+	Message    string    `json:"message"`
+}
+
+type CreateRequest struct {
+	NGOId      string `json:"ngoId" validate:"required"`
+	MaterialId string `json:"materialId" validate:"required"`
+}
+
+type AcceptRequest struct {
+	RequestId string `json:"requestId" validate:"required"`
+	Message   string `json:"message" validate:"required"`
+}
+
 type CreateMaterial struct {
 	Title       string `json:"title" validate:"required"`
 	Description string `json:"description" validate:"required"`

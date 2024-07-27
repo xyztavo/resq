@@ -9,6 +9,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 	"github.com/xyztavo/resq/configs"
+	"github.com/xyztavo/resq/internal/database"
 	"github.com/xyztavo/resq/internal/models"
 )
 
@@ -56,4 +57,16 @@ func BindAndValidate(c echo.Context, structs any) error {
 		return err
 	}
 	return nil
+}
+
+func GetUserCompanyId(c echo.Context) (companyId string, err error) {
+	id, err := GetIdFromToken(c)
+	if err != nil {
+		return "", err
+	}
+	company, err := database.GetUserCompany(id)
+	if err != nil {
+		return "", err
+	}
+	return company.Id, nil
 }

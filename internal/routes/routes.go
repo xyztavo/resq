@@ -14,6 +14,7 @@ func SetupRoutes(e *echo.Echo) {
 	AdminRoutes(e)
 	AuthRequiredRoutes(e)
 	CompanyAdminRoutes(e)
+	NGOAdminRoutes(e)
 }
 
 func AuthRequiredRoutes(e *echo.Echo) {
@@ -26,10 +27,15 @@ func AuthRequiredRoutes(e *echo.Echo) {
 	e.GET("/user/ngo", handlers.GetUserNGO, middlewares.Auth)
 }
 
+func NGOAdminRoutes(e *echo.Echo) {
+	e.POST("/ngo/request", handlers.CreateRequest)
+}
+
 func CompanyAdminRoutes(e *echo.Echo) {
 	e.POST("/company/material", handlers.CreateMaterial, middlewares.CompanyAdminAuth)
 	e.GET("/company/material", handlers.GetCompanyMaterial)
 	e.GET("/user/company", handlers.GetUserCompany, middlewares.Auth)
+	e.POST("/ngo/request/accept", handlers.AcceptRequest, middlewares.CompanyAdminAuth)
 }
 
 func AdminRoutes(e *echo.Echo) {
@@ -41,4 +47,6 @@ func AdminRoutes(e *echo.Echo) {
 	// NGO Related Routes:
 	e.GET("/ngos", handlers.GetNGOs)
 	e.GET("/ngos/admins", handlers.GetNGOsAdmins)
+	e.GET("/requests", handlers.GetRequests)
+
 }

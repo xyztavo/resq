@@ -16,6 +16,9 @@ This project will have a frontend. beta stage for now.
 - [ ] Create Materials Update/Delete routes
 - [ ] Add search filters for Materials
 
-- [ ] Create Requests tables and CRUD routes for them
-- [ ] If company accepts NGO requests, save it a in Requests History table 
+- [x] Create Requests tables Create/read routes for them
+- [ ] Create Requests Update/Delete routes
+
+- [x] Company accept request with message
+
 - [ ] use more joins to prevent making redundant db calls

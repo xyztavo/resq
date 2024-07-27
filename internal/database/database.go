@@ -66,6 +66,14 @@ func Migrate() error {
 	is_active BOOLEAN DEFAULT TRUE,
 	company_id VARCHAR(40) REFERENCES companies(id)
 	);
+	CREATE TABLE IF NOT EXISTS requests (
+	id VARCHAR(40) PRIMARY KEY, 
+	ngo_id VARCHAR(40) REFERENCES ngos(id) NOT NULL,
+	material_id VARCHAR(40) REFERENCES materials(id) NOT NULL,
+	created_at TIMESTAMP DEFAULT NOW(),
+	status VARCHAR(40) DEFAULT 'pending',
+	message VARCHAR(200)
+	);
 	`)
 	if err != nil {
 		return err
